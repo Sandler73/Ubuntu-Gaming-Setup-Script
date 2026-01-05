@@ -311,7 +311,8 @@ We follow responsible disclosure practices:
 
 ## Contact
 
-**General Issues:** https://github.com/Sandler73/Debian-Gaming-Setup-Project/issues
+**General Issues:** [Issues](https://github.com/Sandler73/Debian-Gaming-Setup-Project/issues)
+
 **GPG Key:** Available on request  
 
 **Response Times:**
