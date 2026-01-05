@@ -1,334 +1,337 @@
-# Ubuntu-Gaming-Setup-Script
+# Debian-Based Gaming Setup Script v2.1
 
-A comprehensive Python script to speed up and automated configuring an Ubuntu system for gaming purposes.
+**A comprehensive automated gaming environment setup for Debian-based Linux distributions**
 
-## Features
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.6+](https://img.shields.io/badge/python-3.6+-blue.svg)](https://www.python.org/downloads/)
+[![Ubuntu](https://img.shields.io/badge/Ubuntu-24.04%20%7C%2022.04%20%7C%2020.04-orange.svg)](https://ubuntu.com/)
+[![Maintained](https://img.shields.io/badge/Maintained-Yes-green.svg)](https://github.com/Sandler73/Debian-Gaming-Setup-Project)
 
-### GPU Driver Support
-- **NVIDIA**: Automatic installation of proprietary drivers using `ubuntu-drivers`
-- **AMD**: Mesa and Vulkan driver installation
-- **Intel**: Integrated graphics support with VA-API
-
-### Gaming Platforms
-- **Steam**: Valve's gaming platform with Proton compatibility
-- **Lutris**: Unified launcher for GOG, Epic Games, and more
-- **Heroic Games Launcher**: Epic Games Store and GOG Galaxy alternative
-- **ProtonUp-Qt**: Manage multiple Proton versions (including Proton-GE)
-
-### Compatibility Layers
-- **Wine**: Windows application compatibility (staging branch)
-- **Winetricks**: Wine configuration and dependency management
-- **Proton**: Steam's compatibility tool for Windows games
-
-### System Optimizations
-- 32-bit architecture support (required for many games)
-- Increased inotify file watchers (for games like Star Citizen)
-- Increased memory map count
-- CPU performance governor option
-- GameMode support for automatic performance optimization
-
-### Additional Tools
-- **Discord**: Voice chat and community
-- **OBS Studio**: Streaming and recording
-- **Controller support**: Xbox and generic gamepad support
-- **Multimedia codecs**: Complete codec pack for video playback
-- **Performance launcher script**: Automatically applies optimizations when launching games
-
-## Prerequisites
-
-- Ubuntu 24.04.3 LTS (works on other versions but tested on 24.04.3)
-- Sudo/root privileges
-- Active internet connection
-- Minimum 20 GB free disk space recommended
-
-## Installation
-
-### Download and Run
-
-```bash
-# Download the script
-wget https://github.com/Sandler73/Ubuntu-Gaming-Setup-Script/ubuntu_gaming_setup.py
-
-# Make it executable
-chmod +x ubuntu_gaming_setup.py
-
-# Run with sudo
-sudo python3 ubuntu_gaming_setup.py
-```
-
-### What the Script Does
-
-1. **System Updates**: Updates all packages to latest versions
-2. **GPU Detection**: Automatically detects your GPU type
-3. **Driver Installation**: Installs appropriate drivers for your GPU
-4. **32-bit Support**: Enables i386 architecture for game compatibility
-5. **Gaming Platforms**: Installs Steam, Lutris, and other launchers (with prompts)
-6. **Wine/Proton**: Sets up Windows game compatibility
-7. **Optimizations**: Applies kernel parameters and performance tweaks
-8. **Creates Tools**: Generates a performance launcher script
-
-### Interactive Prompts
-
-The script will ask for confirmation before:
-- Installing each major component
-- Applying system optimizations
-- Installing optional software (Discord, OBS)
-- Rebooting the system
-
-## Post-Installation
-
-### 1. Reboot (REQUIRED)
-```bash
-sudo reboot
-```
-GPU drivers and kernel parameters require a reboot to take effect.
-
-### 2. Verify GPU Drivers
-
-**NVIDIA:**
-```bash
-nvidia-smi
-```
-Should display your GPU information and driver version.
-
-**AMD/Intel:**
-```bash
-vulkaninfo | head -20
-glxinfo | grep "OpenGL renderer"
-```
-
-### 3. Configure Steam
-
-1. Launch Steam
-2. Go to **Settings** → **Steam Play**
-3. Enable "Enable Steam Play for all other titles"
-4. Select **Proton Experimental** or latest Proton version
-5. Restart Steam
-
-### 4. Install Proton-GE (Recommended)
-
-Proton-GE offers better compatibility for many games:
-
-1. Launch ProtonUp-Qt (if installed)
-2. Install latest Proton-GE version
-3. Select it in Steam for specific games that need it
-
-### 5. Test Your Setup
-
-Launch a game or run benchmark:
-```bash
-# Using the performance launcher
-~/launch-game.sh steam steam://rungameid/APPID
-
-# Or directly through Steam
-steam
-```
-
-## Performance Launcher Usage
-
-The script creates `~/launch-game.sh` which automatically:
-- Enables GameMode (if available)
-- Sets CPU governor to performance
-- Runs game with higher process priority
-- Restores settings after game exits
-
-**Example usage:**
-```bash
-~/launch-game.sh /path/to/game
-~/launch-game.sh steam steam://rungameid/570
-```
-
-## Troubleshooting
-
-### NVIDIA Driver Issues
-
-If NVIDIA drivers don't load:
-```bash
-# Check secure boot status (should be disabled)
-mokutil --sb-state
-
-# Reinstall drivers
-sudo ubuntu-drivers autoinstall
-sudo reboot
-```
-
-### Steam Not Launching
-
-```bash
-# Remove and reinstall
-sudo apt remove --purge steam-installer
-sudo apt autoremove
-sudo apt install steam-installer
-```
-
-### Wine Applications Won't Run
-
-```bash
-# Verify 32-bit support
-dpkg --print-foreign-architectures
-# Should show: i386
-
-# Reinstall Wine
-sudo apt install --reinstall winehq-staging
-```
-
-### Performance Issues
-
-1. **Check CPU governor:**
-```bash
-cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
-```
-Should show "performance" while gaming.
-
-2. **Enable GameMode:**
-```bash
-# Check if running
-gamemoded -s
-
-# Test with a game
-gamemoderun ./game
-```
-
-3. **Monitor GPU usage:**
-```bash
-# NVIDIA
-nvidia-smi -l 1
-
-# AMD/Intel
-radeontop  # or intel_gpu_top
-```
-
-### Audio Issues
-
-```bash
-# Restart PulseAudio
-systemctl --user restart pulseaudio
-
-# Check audio devices
-pactl list sinks
-```
-
-## Recommended Settings
-
-### For NVIDIA GPUs
-- Enable "Force Full Composition Pipeline" in NVIDIA Settings for tear-free gaming
-- Use latest proprietary drivers for best performance
-
-### For AMD GPUs
-- Mesa drivers update with system updates - keep system updated
-- Use RADV Vulkan driver (default)
-
-### For Steam Play/Proton
-- Use Proton Experimental for newest games
-- Use Proton-GE for better compatibility
-- Check ProtonDB (www.protondb.com) for game-specific tweaks
-
-### Lutris Tips
-- Install runners as needed (Wine, DXVK, etc.)
-- Use game-specific install scripts from Lutris.net
-- Enable Feral GameMode in Lutris settings
-
-## Logs and Debugging
-
-All installation steps are logged to:
-```
-~/gaming_setup_logs/gaming_setup_YYYYMMDD_HHMMSS.log
-```
-
-Check this file if something goes wrong during installation.
-
-## What Gets Installed
-
-### Core Packages
-- Ubuntu restricted extras (codecs)
-- Mesa Vulkan drivers
-- 32-bit graphics libraries
-- Build tools and libraries
-
-### Gaming Software
-- Steam
-- Lutris
-- Heroic Games Launcher (via Flatpak)
-- Wine (staging branch)
-- Winetricks
-- ProtonUp-Qt (via Flatpak)
-- GameMode
-
-### Optional Software
-- Discord (via Flatpak)
-- OBS Studio
-- Controller utilities (xboxdrv, antimicrox)
-
-### System Optimizations
-- Increased file watchers (fs.inotify.max_user_watches=524288)
-- Increased memory maps (vm.max_map_count=2147483642)
-- CPU performance governor service (optional)
-
-## Uninstalling
-
-To remove gaming components:
-
-```bash
-# Remove Steam
-sudo apt remove --purge steam-installer
-
-# Remove Lutris
-sudo apt remove --purge lutris
-sudo add-apt-repository --remove ppa:lutris-team/lutris
-
-# Remove Wine
-sudo apt remove --purge winehq-staging
-
-# Remove Flatpak apps
-flatpak uninstall com.heroicgameslauncher.hgl
-flatpak uninstall com.discordapp.Discord
-flatpak uninstall net.davidotek.pupgui2
-
-# Remove optimizations
-sudo rm /etc/sysctl.d/99-gaming.conf
-sudo systemctl disable cpu-performance.service
-sudo rm /etc/systemd/system/cpu-performance.service
-```
-
-## Security Considerations
-
-- Script requires sudo privileges
-- Reviews package sources before installation
-- Uses official repositories and PPAs
-- Flatpak apps are sandboxed
-- Creates detailed logs for audit purposes
-
-## Contributing
-
-Found a bug or have a suggestion? This script can be modified to suit your needs:
-- Add/remove gaming platforms
-- Adjust system optimizations
-- Customize package selections
-
-## License
-
-This script is provided as-is for educational and personal use.
-
-## Resources
-
-- [ProtonDB](https://www.protondb.com/) - Game compatibility database
-- [Lutris](https://lutris.net/) - Game install scripts
-- [WineHQ](https://www.winehq.org/) - Wine documentation
-- [Steam Proton](https://github.com/ValveSoftware/Proton) - Official Proton repo
-- [Proton-GE](https://github.com/GloriousEggroll/proton-ge-custom) - GloriousEggroll's Proton
-
-## Changelog
-
-### Version 1.0
-- Initial release
-- Support for Ubuntu 24.04.3
-- NVIDIA, AMD, and Intel GPU support
-- Steam, Lutris, Heroic installation
-- Wine and Proton setup
-- System optimizations
-- Performance launcher script
-- Discord and OBS installation
+Transform your Debian-based Linux system into a complete gaming powerhouse with a single command. This script automates the installation and configuration of GPU drivers, gaming platforms, compatibility layers, performance tools, and system optimizations with both interactive and automated modes.
 
 ---
 
-**Happy Gaming! 🎮**
+## 🌟 What's New in v2.1
+
+- ✨ **SOBER** - Play Roblox on Linux
+- ✨ **Waydroid** - Run Android apps and mobile games  
+- ✨ **GreenWithEnvy** - NVIDIA GPU monitoring and overclocking
+- ✨ **vkBasalt** - ReShade-like post-processing for Vulkan games
+- ✨ **Mod Manager Tools** - Complete modding setup
+- 🐛 **Ubuntu 24.04 Fixes** - Package compatibility resolved
+- 📖 **Enhanced Documentation** - Complete usage guides
+
+[See CHANGELOG.md for full details](https://github.com/Sandler73/Debian-Gaming-Setup-Project/blob/main/CHANGELOG.md)
+
+---
+
+## 🚀 Quick Start
+
+### One-Command Installation
+
+```bash
+# Download
+wget https://github.com/Sandler73/Debian-Gaming-Setup-Project/blob/main/debian_gaming_setup.py
+
+# Interactive mode (recommended for first-time users)
+sudo python3 debian_gaming_setup.py
+
+# Or automated (NVIDIA example)
+sudo python3 debian_gaming_setup.py -y \
+    --nvidia --all-platforms --optimize --launcher
+```
+
+**That's it!** Reboot after installation and start gaming! 🎮
+
+See [Quick_Start](https://github.com/Sandler73/Debian-Gaming-Setup-Project/blob/main/Quick_Start.md) for detailed first-time setup guide.
+
+---
+
+## ⭐ Key Features
+
+- ✅ **6 Gaming Platforms** - Steam, Lutris, Heroic, ProtonUp-Qt, Roblox (SOBER), Android (Waydroid)
+- ✅ **All GPU Vendors** - NVIDIA, AMD, Intel with automatic detection
+- ✅ **VM Support** - VMware, VirtualBox, KVM, Hyper-V, Xen
+- ✅ **51+ CLI Arguments** - Full automation capabilities
+- ✅ **Smart Prompts** - Shows versions, detects updates, intelligent recommendations
+- ✅ **Dry-Run Mode** - Test before installing
+- ✅ **Performance Tools** - GameMode, MangoHud, vkBasalt, CPU governor
+- ✅ **Visual Enhancement** - vkBasalt post-processing, ReShade guidance
+- ✅ **Comprehensive Logging** - Detailed logs with error tracking
+- ✅ **10+ Distributions** - Ubuntu, Mint, Debian, Pop!_OS, Elementary, Zorin, Kali
+
+---
+
+## 📦 What Gets Installed
+
+### Core Components
+- **GPU Drivers** - NVIDIA/AMD/Intel or VM guest tools
+- **Gaming Platforms** - Steam, Lutris, Heroic, ProtonUp-Qt
+- **Compatibility** - Wine, Winetricks, GE-Proton
+- **Performance** - GameMode, MangoHud, Goverlay
+- **Utilities** - Discord, OBS, Mumble, controller support
+
+### New in v2.1 ✨
+- **SOBER** - Roblox on Linux via Flatpak
+- **Waydroid** - Full Android container for mobile games
+- **GreenWithEnvy** - NVIDIA GPU control and monitoring
+- **vkBasalt** - Vulkan post-processing (ReShade-like)
+- **Mod Managers** - MO2, Vortex, r2modman setup
+
+[See complete list in Usage_Guide.md](https://github.com/Sandler73/Debian-Gaming-Setup-Project/blob/main/Usage_Guide.md#component-details)
+
+---
+
+## 💻 Supported Systems
+
+### Tested & Verified ✅
+- Ubuntu 24.04, 22.04, 20.04
+- Linux Mint 22, 21, 20
+- Debian 12 (Bookworm), 11 (Bullseye)
+- Pop!_OS 22.04+
+- Elementary OS 7+
+- Zorin OS 17+
+
+### Hardware Support
+- **Physical GPUs** - NVIDIA GeForce/Quadro/Tesla, AMD Radeon, Intel HD/Iris/Arc
+- **Virtual Machines** - VMware, VirtualBox, KVM/QEMU, Hyper-V
+
+[See full compatibility matrix](https://github.com/Sandler73/Debian-Gaming-Setup-Project/blob/main/Usage_Guide.md#supported-systems)
+
+---
+
+## 🎯 Usage Examples
+
+### Complete Setups
+
+**NVIDIA Gaming PC:**
+```bash
+sudo python3 debian_gaming_setup.py -y \
+    --nvidia --all-platforms --wine --ge-proton \
+    --gamemode --mangohud --gwe --vkbasalt \
+    --discord --obs --optimize --launcher
+```
+
+**AMD Gaming PC:**
+```bash
+sudo python3 debian_gaming_setup.py -y \
+    --amd --all-platforms --wine --ge-proton \
+    --gamemode --mangohud --vkbasalt --optimize
+```
+
+**Virtual Machine:**
+```bash
+sudo python3 debian_gaming_setup.py -y \
+    --vm-tools --steam --lutris --gamemode
+```
+
+### Specialized Setups
+
+**Roblox Player:**
+```bash
+sudo python3 debian_gaming_setup.py -y --sober
+```
+
+**Mobile Gaming:**
+```bash
+sudo python3 debian_gaming_setup.py -y --waydroid --controllers
+```
+
+**Visual Enhancement:**
+```bash
+sudo python3 debian_gaming_setup.py -y --vkbasalt --reshade --mangohud
+```
+
+[See more examples in Usage_Guide.md](Usage_Guide.md#usage-examples)
+
+---
+
+## 🎛️ Command-Line Options
+
+### Quick Reference
+```
+General:          -y, --yes, --dry-run, --verbose
+GPU/Drivers:      --nvidia, --amd, --intel, --vm-tools
+Platforms:        --steam, --lutris, --heroic, --sober, --waydroid
+Compatibility:    --wine, --ge-proton
+Performance:      --gamemode, --mangohud, --gwe
+Graphics:         --vkbasalt, --reshade
+Tools:            --discord, --obs, --mod-managers, --controllers
+System:           --optimize, --launcher
+```
+
+[Complete CLI reference in Usage_Guide.md](https://github.com/Sandler73/Debian-Gaming-Setup-Project/blob/main/Usage_Guide.md#command-line-options-reference)
+
+---
+
+## 🎮 Post-Installation
+
+### Essential Steps
+
+1. **Reboot** (required for drivers)
+   ```bash
+   sudo reboot
+   ```
+
+2. **Verify GPU drivers**
+   ```bash
+   nvidia-smi  # NVIDIA
+   glxinfo | grep "OpenGL renderer"  # AMD/Intel
+   ```
+
+3. **Configure Steam**
+   - Settings → Compatibility
+   - Enable "Steam Play for all titles"
+   - Select Proton Experimental
+
+4. **Test with a game**
+   - Native: Counter-Strike 2, Portal 2 (free)
+   - Proton: Stardew Valley, Terraria
+
+5. **Use performance launcher**
+   ```bash
+   ~/launch-game.sh steam
+   ```
+
+[Detailed post-install guide in Quick_Start.md](https://github.com/Sandler73/Debian-Gaming-Setup-Project/blob/main/Quick_Start.md#after-installation)
+
+---
+
+## 📖 Documentation
+
+| Document | Purpose | Best For |
+|----------|---------|----------|
+| [README.md](https://github.com/Sandler73/Debian-Gaming-Setup-Project/blob/main/README.md) | Overview & quick start | Everyone |
+| [Quick_Start.md](https://github.com/Sandler73/Debian-Gaming-Setup-Project/blob/main/Quick_Start.md) | Step-by-step guide | First-time users |
+| [Usage_Guide.md](https://github.com/Sandler73/Debian-Gaming-Setup-Project/blob/main/Usage_Guide.md) | Complete reference | All users |
+| [CHANGELOG.md](https://github.com/Sandler73/Debian-Gaming-Setup-Project/blob/main/CHANGELOG.md) | Version history | Tracking changes |
+| [CONTRIBUTING.md](https://github.com/Sandler73/Debian-Gaming-Setup-Project/blob/main/CONTRIBUTING.md) | Contribution guide | Contributors |
+| [SECURITY.md](https://github.com/Sandler73/Debian-Gaming-Setup-Project/blob/main/SECURITY.md) | Security policies | Reporting issues |
+
+---
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+**"Package has no installation candidate"**
+```bash
+sudo apt-get update && sudo apt-get upgrade
+```
+
+**NVIDIA driver not loading**
+```bash
+sudo apt-get install --reinstall nvidia-driver-*
+sudo update-initramfs -u && sudo reboot
+```
+
+**Steam won't launch**
+```bash
+steam  # Run from terminal to see errors
+rm -rf ~/.steam/steam/appcache/  # Clear cache
+```
+
+**Check logs**
+```bash
+cat ~/gaming_setup_logs/gaming_setup_*.log | tail -100
+grep ERROR ~/gaming_setup_logs/gaming_setup_*.log
+```
+
+[Full troubleshooting guide in Usage_Guide.md](Usage_Guide.md#troubleshooting)
+
+---
+
+## 🤝 Contributing
+
+Contributions welcome! See [CONTRIBUTING.md](https://github.com/Sandler73/Debian-Gaming-Setup-Project/blob/main/CONTRIBUTING.md) for guidelines.
+
+**Quick steps:**
+1. Fork repository
+2. Create feature branch
+3. Test with `--dry-run`
+4. Submit pull request
+
+**Areas needing help:**
+- Testing on different distributions
+- Additional platform support
+- Documentation improvements
+- Bug fixes
+
+---
+
+## 📊 Project Stats
+
+- **3,341 lines** of Python code
+- **51+ CLI arguments** for automation
+- **6 gaming platforms** supported
+- **15+ utilities** included
+- **10+ distributions** tested
+- **Active maintenance** ongoing
+
+---
+
+## 🌟 Acknowledgments
+
+**Inspired by:**
+- Original Ubuntu gaming setup script
+- GameReady, linux-gaming, Gamebuntu projects
+
+**Special thanks:**
+- Valve (Steam, Proton)
+- Lutris developers
+- GloriousEggroll (GE-Proton)
+- Feral Interactive (GameMode)
+- MangoHud developers
+- Open-source gaming community
+
+---
+
+## 📜 License
+
+[MIT License](https://github.com/Sandler73/Debian-Gaming-Setup-Project/blob/main/LICENSE) - Free to use, modify, and distribute.
+
+---
+
+## ⚠️ Disclaimer
+
+This script makes system-level changes. Always:
+- ✅ Backup important data
+- ✅ Test with `--dry-run` first
+- ✅ Review logs for errors
+- ✅ Understand what's being installed
+
+**Use at your own risk.** No warranty provided.
+
+---
+
+## 🚀 Get Started
+
+```bash
+# Download
+wget https://github.com/Sandler73/Debian-Gaming-Setup-Project/blob/main/debian_gaming_setup.py
+
+# Test (safe)
+sudo python3 debian_gaming_setup.py --dry-run
+
+# Install (interactive)
+sudo python3 debian_gaming_setup.py
+
+# Install (automated)
+sudo python3 debian_gaming_setup.py -y --all-platforms --optimize
+```
+
+**Ready to game on Linux?** See [Quick_Start.md](https://github.com/Sandler73/Debian-Gaming-Setup-Project/blob/main/Quick_Start.md)! 🎮
+
+---
+
+<div align="center">
+
+**⭐ Star this repo if it helped you! ⭐**
+
+Made with ❤️ for the Linux gaming community
+
+**Version 2.1.0** | Updated January 2026
+
+[Report Issue](https://github.com/Sandler73/Debian-Gaming-Setup-Project/issues) | [Request Feature](https://github.com/Sandler73/Debian-Gaming-Setup-Project/issues/new) | [Contribute](https://github.com/Sandler73/Debian-Gaming-Setup-Project/blob/main/CONTRIBUTING.md)
+
+</div>
