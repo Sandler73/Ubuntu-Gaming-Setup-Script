@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2025 Ryan
+Copyright (c) 2026 Debian-Based Gaming Setup Script Contributors - Ryan (aka Sandler73)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -19,3 +19,61 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+---
+
+THIRD-PARTY SOFTWARE
+
+This script facilitates the installation of third-party software packages, each
+governed by their own licenses:
+
+- Steam: Valve Corporation End User License Agreement
+- Lutris: GPLv3
+- Heroic Games Launcher: GPLv3
+- Wine: LGPLv2.1+
+- GameMode: BSD-3-Clause
+- MangoHud: MIT License
+- Discord: Discord Terms of Service
+- OBS Studio: GPLv2
+- SOBER/Vinegar: GPLv3
+- Waydroid: Apache License 2.0
+- GreenWithEnvy: GPLv3
+- vkBasalt: Zlib License
+
+Users are responsible for complying with the licenses of all installed software.
+
+---
+
+DISCLAIMER OF WARRANTY
+
+THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED. THE AUTHORS OR COPYRIGHT HOLDERS SHALL NOT BE LIABLE FOR ANY CLAIM,
+DAMAGES OR OTHER LIABILITY ARISING FROM THE USE OF THIS SOFTWARE.
+
+Users assume all risks associated with installation and use of this script,
+including but not limited to:
+- System modifications
+- Data loss
+- Software compatibility issues
+- Performance degradation
+- Security vulnerabilities in third-party software
+
+ALWAYS backup important data before running system modification scripts.
+
+---
+
+ATTRIBUTION
+
+If you use this software in your project or distribute a modified version,
+please maintain attribution to the original authors and contributors.
+
+Suggested attribution:
+"Based on Debian-Based Gaming Setup Project"
+"https://github.com/Sandler73/Debian-Gaming-Setup-Project/tree/main"
+
+---
+
+CONTRIBUTIONS
+
+By contributing to this project, you agree that your contributions will be
+licensed under the same MIT License.
